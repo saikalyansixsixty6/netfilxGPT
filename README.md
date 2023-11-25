@@ -2,8 +2,10 @@
 -Frontend configured with vite
 -Configured Tailwindcss
 -Header
+-Routing for App
 -Login Form/ signIn form
 -Signup form
+-form validation
 
 # Features
 -Login/Sign up 

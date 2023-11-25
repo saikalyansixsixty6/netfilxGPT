@@ -1,18 +1,29 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Header from "./Header";
+import { checkValidData } from "../utils/validate";
 
 
 const Login = () => {
 
  const [login,setLogin] = useState(true);
-
+ const email = useRef(null);
+ const password = useRef(null);
+ const [errorMessage,setErrorMessage] = useState(null);
 
  const toggleSignInForm = () =>{
-    setLogin(false)
+    setLogin(!login)
+
+ };
+
+ const handleClickButton = ()=>{
+        
+        console.log(email.current.value);
+        console.log(password.current.value);
+
+        const message = checkValidData(email.current.value,password.current.value);
+        setErrorMessage(message)
  }
- const toggleSignupForm = () =>{
-  setLogin(true)
-}
+ 
 
   return (
     <div>
@@ -23,73 +34,61 @@ const Login = () => {
           alt="logo"
         />
       </div>
-      {
-        login ? (
-          <form className="w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80">
-          <h1 className="text-3xl font-bold py-4">Sign In</h1>
+
+      <form onSubmit={(e)=>e.preventDefault()} className="w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80">
+      <h1 className="text-3xl font-bold py-4">{login? "SignIn":"SignUp"}</h1>
+        { !login && 
+         (
+         <input
+           type="text"
+           name="username"
+           
+           className="p-4 my-4 w-full text-white bg-gray-700 h-11"
+           placeholder="Username"
+         />)
+        
+        }
+          
           <input
             type="email"
             name="email"
-            id=""
+            ref={email}
+            
             className="p-4 my-4 w-full text-white bg-gray-700 h-11"
-            placeholder="Email or Username"
+            placeholder={login?"Email or Username":"Email"}
           />
           <input
             type="password"
             name="password"
-            id=""
+            
+            ref={password}
             className="p-4 my-4 w-full text-white bg-gray-700 h-11"
             placeholder="Password"
           />
+        <p className="text-red-500 font-bold text-lg py-2">{errorMessage}</p>
+
           <button
             type="submit"
             className="p-2 my-6 bg-red-700 rounded-lg h-10 w-full text-white"
+            onClick={handleClickButton}
           >
-            Sign In
+           {login? "SignIn":"SignUp"}
           </button>
-          <p className="py-4" onClick={toggleSignInForm}>New to Netflix? <span className="font-bold">SignUp</span> now</p>
+          {
+            login? (
+              <p className="py-4 cursor-pointer" onClick={toggleSignInForm}>
+                New to Netflix? <span className="font-bold"> SignUp</span>
+              </p>
+            ):(
+              <p className="py-4 cursor-pointer" onClick={toggleSignInForm}>
+                Already registered?<span className="font-bold"> SignIn</span>
+              </p>
+            )
+          }
+          
         </form>
 
-
-        ):(
-          <form className="w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80">
-        <h1 className="text-3xl font-bold py-4">Sign Up</h1>
-        <input
-          type="text"
-          name="username"
-          id=""
-          className="p-4 my-4 w-full text-white bg-gray-700 h-11"
-          placeholder="Username"
-        />
-        <input
-          type="email"
-          name="email"
-          id=""
-          className="p-4 my-4 w-full text-white bg-gray-700 h-11"
-          placeholder="Email or Username"
-        />
-        <input
-          type="password"
-          name="password"
-          id=""
-          className="p-4 my-4 w-full text-white bg-gray-700 h-11"
-          placeholder="Password"
-        />
-        <button
-          type="submit"
-          className="p-2 my-6 bg-red-700 rounded-lg h-10 w-full text-white"
-        >
-          Sign In
-        </button>
-        <p className="py-4" onClick={toggleSignupForm}>Already SignUp? <span className="font-bold">Login</span></p>
-      </form>
-
-
-
-
-        )
-      }
-
+      
 
 
       
@@ -98,3 +97,5 @@ const Login = () => {
 };
 
 export default Login;
+
+
